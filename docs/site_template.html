@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PipelineLab: latest pipeline report</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --panel: #ffffff; --ink: #14202b; --muted: #5b6b79;
+    --line: #d9dee4; --accent: #1f6f6b; --get: #1f6f6b; --post: #8a5a00;
+    --patch: #5a4bb0; --delete: #a3322d;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #10161c; --panel: #17202a; --ink: #e6ecf1; --muted: #93a3b1;
+      --line: #2a3745; --accent: #5cc4bc; --get: #5cc4bc; --post: #e0b25a;
+      --patch: #a99cf0; --delete: #f08a84;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { padding-top: env(safe-area-inset-top, 0px); }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  main { max-width: 860px; margin: 0 auto; padding: 48px 20px 80px; }
+  h1 { font-size: 2rem; margin: 0 0 4px; letter-spacing: -0.01em; }
+  h2 { font-size: 1.1rem; margin: 48px 0 16px; }
+  p, td, li span { color: var(--muted); }
+  a { color: var(--accent); }
+  code { font: 0.9em ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .meta { color: var(--muted); margin: 0 0 32px; }
+  .rail { list-style: none; margin: 0; padding: 0 0 0 14px; border-left: 2px solid var(--line); }
+  .rail li { position: relative; padding: 0 0 18px 22px; display: flex; flex-wrap: wrap; gap: 4px 12px; }
+  .rail li:last-child { padding-bottom: 0; }
+  .rail .dot {
+    position: absolute; left: -22px; top: 8px; width: 12px; height: 12px;
+    border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px var(--bg);
+  }
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+  .fact { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; }
+  .fact b { display: block; font-size: 1.6rem; line-height: 1.2; }
+  .fact span { color: var(--muted); font-size: 0.9rem; }
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  td { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .m { font-weight: 600; }
+  .m-get { color: var(--get); } .m-post { color: var(--post); }
+  .m-patch { color: var(--patch); } .m-delete { color: var(--delete); }
+  pre {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+    padding: 14px 16px; overflow-x: auto; margin: 0;
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>PipelineLab</h1>
+  <p class="meta">
+    Pipeline <a href="$pipeline_url">#$pipeline</a> on <code>$branch</code>,
+    commit <code>$commit</code>, built $built.
+  </p>
+
+  <h2>What ran</h2>
+  <ol class="rail">
+$stages
+  </ol>
+
+  <h2>Results</h2>
+  <div class="facts">
+    <div class="fact"><b>$tests</b><span>tests passed</span></div>
+    <div class="fact"><b>$coverage</b><span>line coverage</span></div>
+    <div class="fact"><b>$duration</b><span>test run time</span></div>
+  </div>
+  <p>$coverage_link</p>
+
+  <h2>API endpoints</h2>
+  <div class="scroll">
+    <table>
+$endpoints
+    </table>
+  </div>
+  <p>The full schema is in <a href="openapi.json">openapi.json</a>.</p>
+
+  <h2>Run the image</h2>
+<pre><code>docker run --rm -p 8000:8000 $image:latest</code></pre>
+</main>
+</body>
+</html>
